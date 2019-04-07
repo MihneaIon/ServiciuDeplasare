@@ -2,6 +2,7 @@ package com.licenta.app.UbberLicenta.webSocketHandler;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.licenta.app.UbberLicenta.beans.DriverBean;
 import com.licenta.app.UbberLicenta.beans.SessionBean;
 import com.licenta.app.UbberLicenta.model.Position;
 import com.licenta.app.UbberLicenta.model.SessionForAUser;
@@ -29,6 +30,9 @@ public class NotificationHandler  extends TextWebSocketHandler {
 
     @Autowired
     private SessionBean sessionBean;
+
+    @Autowired
+    private DriverBean driverBean;
 
     public NotificationHandler()
     {
@@ -78,6 +82,30 @@ public class NotificationHandler  extends TextWebSocketHandler {
         sessionId = "";
     }
 
+//    @Override // intreab ce se intamla cu concurenta
+//    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+//        System.out.println(String.format("Message received from the client"+message));
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        try{
+//            JsonNode jsonNode = objectMapper.readTree(message.getPayload());
+//            JsonNode jsonResponse = jsonNode.get("data");
+//            JsonNode myPositions = null;
+//
+//             for(JsonNode d : jsonResponse) {
+//                myPositions =d.get("position");
+//            }
+//            JsonNode lat = myPositions.get("lat");
+//            JsonNode lng = myPositions.get("lng");
+//            Position sayWhereTheDriverIs= new Position(transformJosnNodeToFloat(lat),transformJosnNodeToFloat(lng));
+//            SessionForAUser myTransmitere = new SessionForAUser(sayWhereTheDriverIs,session+"");
+//            sessionBean.listaDeTransmitereDeSesiune(myTransmitere);
+//            System.out.println("response" + sayWhereTheDriverIs);
+//            System.out.println("transmiterea de sesiune"+ myTransmitere);
+//        }catch (IOException exception){
+//            System.out.println(String.format("Exception occurred while handling web socket message. Message: %s", exception.getMessage()));
+//        }
+//    }
+
     @Override // intreab ce se intamla cu concurenta
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         System.out.println(String.format("Message received from the client"+message));
@@ -85,24 +113,15 @@ public class NotificationHandler  extends TextWebSocketHandler {
         try{
             JsonNode jsonNode = objectMapper.readTree(message.getPayload());
             JsonNode jsonResponse = jsonNode.get("data");
-            JsonNode myPositions = null;
-
-             for(JsonNode d : jsonResponse) {
-                myPositions =d.get("position");
-            }
-            JsonNode lat = myPositions.get("lat");
-            JsonNode lng = myPositions.get("lng");
+            JsonNode lat = jsonResponse.get("lat");
+            JsonNode lng = jsonResponse.get("lng");
             Position sayWhereTheDriverIs= new Position(transformJosnNodeToFloat(lat),transformJosnNodeToFloat(lng));
-            SessionForAUser myTransmitere = new SessionForAUser(sayWhereTheDriverIs,session+"");
-            //sayWhereTheDriverIs.setId(session);
-//            arrayOfPositions.listAllPosition(sayWhereTheDriverIs);
-            sessionBean.listaDeTransmitereDeSesiune(myTransmitere);
-//            String prelucrare = session+"";
-//            String faSubstringLaCeaAmAcum = prelucrare.substring(28,64);
-//            System.out.println("sall bosss "+ faSubstringLaCeaAmAcum);
-//            arrayOfPositions.listAllPositionAndSeesions(faSubstringLaCeaAmAcum,sayWhereTheDriverIs);
+            driverBean.myList.add(sayWhereTheDriverIs);
+//            SessionForAUser myTransmitere = new SessionForAUser(sayWhereTheDriverIs,session+"");
+//            sessionBean.listaDeTransmitereDeSesiune(myTransmitere);
+
             System.out.println("response" + sayWhereTheDriverIs);
-            System.out.println("transmiterea de sesiune"+ myTransmitere);
+//            System.out.println("transmiterea de sesiune"+ myTransmitere);
         }catch (IOException exception){
             System.out.println(String.format("Exception occurred while handling web socket message. Message: %s", exception.getMessage()));
         }
