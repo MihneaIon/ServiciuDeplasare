@@ -41,7 +41,7 @@ public class HandleSessionBeanMessageController {
             mySessionList.add(entry.getKey() + "");
         }
         System.out.println(sessionBean.listaCuDeToate+" si sizeu-ul "+ sessionBean.listaCuDeToate.size());
-        System.out.println(sessionBean.listaCuDeToate.get(0).getSesiune()+"asta e laba");
+        System.out.println(sessionBean.listaCuDeToate.get(0).getSesiune()+"asta primesc un warn");
 
         for (int i = 0; i < seesionNotificationHandler.sessions.size(); i++) {
             System.out.println("i-ul este "+i);
