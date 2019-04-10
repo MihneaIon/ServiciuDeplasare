@@ -22,10 +22,20 @@ public class HandleDrivers {
     @Resource(name = "driversList")
     Position myPosition;
 
-    @RequestMapping(value = "/driver/position", method = RequestMethod.GET)
+    @RequestMapping(value = "/driver/position", method = RequestMethod.POST)
     public List<Position> addDriversPositions(){
         System.out.println(myPosition);
         return myDriverBean.myList;
+    }
+
+    // de modificat metoda
+    @RequestMapping(value = "/display", method = RequestMethod.GET)
+    public Position displayDriver(){
+        for(Position statusDriver:myDriverBean.myList){
+            System.out.println(statusDriver);
+            return statusDriver;
+        }
+        return null;
     }
 
 

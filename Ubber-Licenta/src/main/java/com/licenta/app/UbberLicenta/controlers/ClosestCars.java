@@ -32,6 +32,9 @@ public class ClosestCars {
     @Autowired
     private NotificationHandler myNotificationHandler;
 
+    @Autowired
+    private HandleDrivers myHandleDrivers;
+
     private static final Logger logger = LogManager.getLogger(ClosestCars.class);
 
     @ResponseBody
@@ -55,6 +58,8 @@ public class ClosestCars {
         Position myPosition7 = new Position(TransformDoubleToFloat.reversa(45.1313222), TransformDoubleToFloat.reversa(25.3715439)); // Fieni
         Position myPosition8 = new Position(TransformDoubleToFloat.reversa(46.7822424), TransformDoubleToFloat.reversa(23.6047355)); // Cluj
         Position myPosition9 = new Position(TransformDoubleToFloat.reversa(45.3482449), TransformDoubleToFloat.reversa(25.5492405)); // Sinaia
+        Position keepTheDriver = myHandleDrivers.displayDriver();
+//        System.out.println("What I expected for "+ keepTheDriver.getLng()+" "+ keepTheDriver.getLng());
         ScaledSizeCar myScaledSizeCar = new ScaledSizeCar("20", "20");
         SizeCar mySizeCar = new SizeCar("20", "20");
         System.out.println("am intrat");
@@ -68,6 +73,7 @@ public class ClosestCars {
         Car car7 = new Car("Model", "azure", myPosition7, mySizeCar, myScaledSizeCar, "Sorin", "BV 07 AND");
         Car car8 = new Car("Model", "grey", myPosition8, mySizeCar, myScaledSizeCar, "Luca", "BV 08 AND");
         Car car9 = new Car("Model", "azure", myPosition9, mySizeCar, myScaledSizeCar, "Dany", "BV 09 AND");
+        Car carDriver = new Car("Model", "negru", keepTheDriver, mySizeCar, myScaledSizeCar, "Marius", "BV 010 AND");
         myCarList.add(car1);
         myCarList.add(car2);
         myCarList.add(car3);
@@ -77,6 +83,8 @@ public class ClosestCars {
         myCarList.add(car7);
         myCarList.add(car8);
         myCarList.add(car9);
+        myCarList.add(carDriver);
+        System.out.println("Size car list "+myCarList.size());
         for (Car auxCar : myCarList) {
             theClosestCars.put(auxCar, DistanceBetweenThoPlaces.calculateDistanceInKilometer(clientPosition.getLat(), clientPosition.getLng(),
                     auxCar.getPosition().getLat(), auxCar.getPosition().getLng()));

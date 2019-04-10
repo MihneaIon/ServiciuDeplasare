@@ -2,7 +2,8 @@
   <div id="google-app">
     <!-- drawer options -->
     <vue-drawer-layout
-      style=" background-color:#fff; margin-top:14%"
+      class="drawer-layout"
+      style=" background-color:#fff; margin-top:7%"
       ref="drawer"
       :drawer-width="450"
       :enable="true"
@@ -70,7 +71,7 @@
             ref="mapRef"
             v-bind:center="center"
             v-bind:zoom="14"
-            style="width:100%; height: 625px; margin-top: 30px"
+            style="width:100%; height:700px; margin-top: 20px"
           >
             <!-- desenez linia client -> destinatie -->
             <gmap-polyline
@@ -93,7 +94,7 @@
               v-bind:key="cars.color"
               v-for="(m, cars) in markers"
               v-bind:position="m.position"
-              v-bind:icon="{url:'https://www.freeiconspng.com/uploads/pic--home-address-symbol-png-29.png',scaledSize: { width: 20, height: 35 } }"
+              v-bind:icon="{url:'https://www.freeiconspng.com/uploads/pic--home-address-symbol-png-29.png',scaledSize: { width: 20, height: 30 } }"
               @click="clickOnTheCarForMoreDetails(m)"
               v-bind::clickable="true"
               v-bind::draggable="true"
@@ -120,10 +121,10 @@
             ></gmap-marker>
             <!-- drumul de la client la destinatie -->
             <gmap-marker
-              v-bind:key="distanta.lat"
+              v-bind:key="distanta.id"
               v-for="(m, distanta) in vectorDePozitiiIntermediare"
               v-bind:position="m.position"
-              v-bind:icon="{url: 'https://www.freeiconspng.com/uploads/auto-car-coupe-sport-top-view-icon-0.png', scaledSize: { width: 20, height: 35 }}"
+              v-bind:icon="{url: 'https://www.freeiconspng.com/uploads/auto-car-coupe-sport-top-view-icon-0.png', scaledSize: { width: 20, height: 25 }}"
               v-bind::clickable="true"
               v-bind::draggable="true"
             ></gmap-marker>
@@ -139,7 +140,6 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 import axios from "axios";
 import { gmapApi } from "vue2-google-maps";
 import Drivers from "./Drivers.vue";
-// import {EventBus} from './index.js';
 
 export default {
   components: {
@@ -217,13 +217,7 @@ export default {
         latlng: {},
         address: {}
       },
-
-      auxMarker:[
-          {
-            position:{lat: parseFloat(45.1313222), lng: parseFloat(25.3715439)},
-          }
-        ],
-
+      theClientClickedOnTheSetRoute: true,
       // variabile pentru drawer
       isTrue: true,
       width: this.drawerWidth,
@@ -237,12 +231,7 @@ export default {
     };
   },
 
-  created() {
-    //this.$store.state.tasks.pozitiiIntermediare
-    //this.$$store.dispatch("sendMessage")
-    //this.$store.dispatch("getAllCars");
-    //this.$store.commit("selectCar")
-  },
+  created() {},
   mounted() {
     this.geolocate();
   },
@@ -255,9 +244,26 @@ export default {
     }
   },
   methods: {
-    sendDriverPosition: function(val) {
+    sendDriverPosition: function() {
+      // let pozitiiFin = this.carMarker.map(
+      //       pozitieIntermediara => {
+      //         pozitieIntermediara.position = {
+      //           lat: pozitieIntermediara.lat,
+      //           lng: pozitieIntermediara.lng,
+      //         },
+      //         pozitieIntermediara.type= 'client'
+      //       }
+      //     );
+      const pozitie = {
+        position: {
+          lat: this.carMarker[0].position.lat,
+          lng: this.carMarker[0].position.lng
+        },
+        type: "client"
+      };
+      console.log("acesata este mirifica pozitie", pozitie);
       //this.$socket.send(this.carMarker);
-      this.$socket.sendObj({ data: this.carMarker });
+      this.$socket.sendObj({ data: pozitie });
     },
     setPlace(place) {
       this.currentPlace = place;
@@ -301,9 +307,6 @@ export default {
         }
       }
     },
-    // saveTheDataFromBackEnd(){
-
-    // },
     displayClosestDrivers() {
       this.$store.dispatch("getAllCars");
       this.carMarker = this.cars;
@@ -322,73 +325,76 @@ export default {
     //   actualContext.$modal.show("price-modal");
     // },
     getRoute: function() {
-      this.$refs.mapRef.$mapObject;
-      console.log(" afisez mapObject", this.$refs.mapRef.$mapObject);
-      this.directionService = new google.maps.DirectionsService();
-      this.directionsDisplay = new google.maps.DirectionsRenderer();
-      this.directionsDisplay.setMap(this.$mapObject);
-      var actualContext = this;
-      if (this.markers === undefined) {
-        window.alert("no location selected");
-      }
-      console.log(this.markers);
-      if (this.markers.length != 0) {
-        this.origin = {
-          lat: this.markers[0].position.lat,
-          lng: this.markers[0].position.lng
-        };
-      }
-      if (this.destinationMarker === undefined) {
-        window.alert("destination not selected");
-      }
-      if (this.destinationMarker.length != 0) {
-        this.destination = {
-          lat: this.destinationMarker[0].position.lat,
-          lng: this.destinationMarker[0].position.lng
-        };
-      }
-      actualContext.directionService.route(
-        {
-          // call back asteapta raspuns de la functie
-          origin: {
+      if (this.theClientClickedOnTheSetRoute) {
+        this.$refs.mapRef.$mapObject;
+        console.log(" afisez mapObject", this.$refs.mapRef.$mapObject);
+        this.directionService = new google.maps.DirectionsService();
+        this.directionsDisplay = new google.maps.DirectionsRenderer();
+        this.directionsDisplay.setMap(this.$mapObject);
+        var actualContext = this;
+        if (this.markers === undefined) {
+          window.alert("no location selected");
+        }
+        console.log(this.markers);
+        if (this.markers.length != 0) {
+          this.origin = {
             lat: this.markers[0].position.lat,
             lng: this.markers[0].position.lng
-          },
-          destination: {
+          };
+        }
+        if (this.destinationMarker === undefined) {
+          window.alert("destination not selected");
+        }
+        if (this.destinationMarker.length != 0) {
+          this.destination = {
             lat: this.destinationMarker[0].position.lat,
             lng: this.destinationMarker[0].position.lng
+          };
+        }
+        actualContext.directionService.route(
+          {
+            // call back asteapta raspuns de la functie
+            origin: {
+              lat: this.markers[0].position.lat,
+              lng: this.markers[0].position.lng
+            },
+            destination: {
+              lat: this.destinationMarker[0].position.lat,
+              lng: this.destinationMarker[0].position.lng
+            },
+            travelMode: "DRIVING"
           },
-          travelMode: "DRIVING"
-        },
-        function(response, status) {
-          if (status === "OK") {
-            actualContext.directionsDisplay.setDirections(response),
-              console.log("raspunsul:", response);
-            // desenez traseul
-            var legs = response.routes[0].legs;
-            for (var i = 0; i < legs.length; i++) {
-              if (i == 0) {
-                actualContext.startLocation.latlng = legs[i].start_location;
-                actualContext.startLocation.address = legs[i].start_address;
-              }
-              actualContext.endLocation.latlng = legs[i].end_location;
-              actualContext.endLocation.address = legs[i].end_adress;
-              var steps = legs[i].steps;
-              for (var j = 0; j < steps.length; j++) {
-                var nextSegment = steps[j].path;
-                for (var k = 0; k < nextSegment.length; k++) {
-                  actualContext.insertIntoAuxLatVenth(nextSegment[k]);
+          function(response, status) {
+            if (status === "OK") {
+              actualContext.directionsDisplay.setDirections(response),
+                console.log("raspunsul:", response);
+              // desenez traseul
+              var legs = response.routes[0].legs;
+              for (var i = 0; i < legs.length; i++) {
+                if (i == 0) {
+                  actualContext.startLocation.latlng = legs[i].start_location;
+                  actualContext.startLocation.address = legs[i].start_address;
+                }
+                actualContext.endLocation.latlng = legs[i].end_location;
+                actualContext.endLocation.address = legs[i].end_adress;
+                var steps = legs[i].steps;
+                for (var j = 0; j < steps.length; j++) {
+                  var nextSegment = steps[j].path;
+                  for (var k = 0; k < nextSegment.length; k++) {
+                    actualContext.insertIntoAuxLatVenth(nextSegment[k]);
+                  }
                 }
               }
+              actualContext.getTheCost();
+              actualContext.theClientClickedOnTheSetRoute = false
+              // actualContext.$modal.show("price-modal");
+            } else {
+              console.log("Directions request failed due to " + status);
             }
-            actualContext.getTheCost();
-          } else {
-            console.log("Directions request failed due to " + status);
           }
-        }
-      );
-      this.$store.dispatch("getAllCars");
-      actualContext.$modal.show("price-modal");
+        );
+        // actualContext.$modal.show("price-modal");
+      }
     },
     addMarkerForACustomDestination() {
       if (this.currentPlace) {
@@ -574,24 +580,26 @@ export default {
         });
     },
     getMyIntermdiateRoad() {
-      // am modificat aici testeaza functia.
       var scop = this;
-      const url = "http://localhost:8082/distanta/getMulteMasinute";
+      const url = "http://localhost:8082/distanta/getIntermediateRoad";
       axios
         .get(url)
         .then(response => {
           scop.vectorDePozitiiIntermediare = response.data;
-          //let lungime = scop.vectorDePozitiiIntermediare.length
-          //scop.vectorDePozitiiIntermediare.splice(lungime/2,lungime)
-          let pozitiiFin = scop.vectorDePozitiiIntermediare.map(
-            pozitieIntermediara => {
-              pozitieIntermediara.position = {
-                lat: pozitieIntermediara.lat,
-                lng: pozitieIntermediara.lng
-              };
-            }
-          );
-          console.log(pozitiiFin);
+          console.log("raspunsul", scop.vectorDePozitiiIntermediare);
+          // let lungime = scop.vectorDePozitiiIntermediare.length
+          // scop.vectorDePozitiiIntermediare.splice(lungime/2,lungime)
+          //  console.log('sa vedem daca ajunge aici')
+          // let pozitiiFin = scop.vectorDePozitiiIntermediare.map(
+          //   pozitieIntermediara => {
+          //     pozitieIntermediara.position = {
+          //       lat: pozitieIntermediara.lat,
+          //       lng: pozitieIntermediara.lng
+          //     },
+          //     pozitieIntermediara.type= 'client'
+          //   }
+          // );
+          // console.log('pozitie',pozitiiFin);
           console.log(
             "Acesta este vectorul de pozitii intermediare",
             scop.vectorDePozitiiIntermediare
@@ -616,6 +624,7 @@ export default {
         });
     },
     clickOnTheCarForMoreDetails(masina) {
+      this.$store.dispatch("getAllCars");
       this.selectYourFavouriteDriver();
       console.log("culoarea masinii", this.masina.color);
       if (!this.esckey) {
@@ -634,6 +643,7 @@ export default {
         if (that.esckey == true) {
           that.$refs.drawer.toggle();
           that.esckey = false;
+          that.$store.dispatch("getAllCars");
           that.drowerVisibility = false;
           that.comutator = false;
           that.getMyIntermdiateRoad();
@@ -738,20 +748,18 @@ export default {
     return distance / width;
   }
 };
-
-// var allowCrossDomain = function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', "*");
-//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type');
-//     next();
-// }
 </script>
 
 <style>
 /* Set the size of the div element that contains the map */
 #map {
-  height: 100%; /* The height is 400 pixels  Am modificat  */ 
+  height: 600px; /* The height is 400 pixels  Am modificat  */
   width: 100%; /* The width is the width of the web page */
+}
+#google-app{
+  margin-top: -5px;
+  height: 100px; /* The height is 400 pixels  Am modificat  */
+  width: 100%; 
 }
 body {
   height: 900px;
@@ -771,6 +779,9 @@ body {
 
 .md-content {
   padding: 16px;
+}
+.drawer-layout {
+  margin-top: 4%;
 }
 .drawer-mask {
   position: inherit;
@@ -820,26 +831,29 @@ p {
   margin-right: 15px;
 }
 .harta {
+  margin-top: 2%;
   margin-left: 5%;
   margin-right: 5%;
 }
 
-@media screen and (max-width: 720px) {
+/* @media screen and (max-width: 720px) {
   .harta {
     width: 94%;
     margin-left: 3%;
   }
-}
+} */
 .drawer-wrap {
   margin-top: 75px;
 }
 .content-wrap {
-  margin-top: 75px;
+  margin-top: 2%;
   margin-left: 15px;
   margin-right: 15px;
+  padding: 10px;
+  margin: 3px;
 }
 .vue-drawer-layout {
-  margin-top: 20%;
+  margin-top: 10%;
 }
 .curentPosition {
   background-image: url("../assets/icons/target.svg");

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.licenta.app.UbberLicenta.beans.DriverBean;
 import com.licenta.app.UbberLicenta.beans.SessionBean;
+import com.licenta.app.UbberLicenta.model.ModelDeTransmitereAMesajului;
 import com.licenta.app.UbberLicenta.model.Position;
 import com.licenta.app.UbberLicenta.model.SessionForAUser;
 import org.keycloak.common.util.ConcurrentMultivaluedHashMap;
@@ -98,6 +99,7 @@ public class NotificationHandler  extends TextWebSocketHandler {
 //            JsonNode lng = myPositions.get("lng");
 //            Position sayWhereTheDriverIs= new Position(transformJosnNodeToFloat(lat),transformJosnNodeToFloat(lng));
 //            SessionForAUser myTransmitere = new SessionForAUser(sayWhereTheDriverIs,session+"");
+//            driverBean.myList.add(sayWhereTheDriverIs);
 //            sessionBean.listaDeTransmitereDeSesiune(myTransmitere);
 //            System.out.println("response" + sayWhereTheDriverIs);
 //            System.out.println("transmiterea de sesiune"+ myTransmitere);
@@ -113,15 +115,22 @@ public class NotificationHandler  extends TextWebSocketHandler {
         try{
             JsonNode jsonNode = objectMapper.readTree(message.getPayload());
             JsonNode jsonResponse = jsonNode.get("data");
-            JsonNode lat = jsonResponse.get("lat");
-            JsonNode lng = jsonResponse.get("lng");
+            JsonNode jsonPosition = jsonResponse.get("position");
+            JsonNode jsonType = jsonResponse.get("type");
+            JsonNode lat = jsonPosition.get("lat");
+            JsonNode lng = jsonPosition.get("lng");
             Position sayWhereTheDriverIs= new Position(transformJosnNodeToFloat(lat),transformJosnNodeToFloat(lng));
+            ModelDeTransmitereAMesajului modelDeTransmitereAMesajului = new ModelDeTransmitereAMesajului(sayWhereTheDriverIs,jsonType+"");
+            if((jsonType+"").equals("\"driver\""))
             driverBean.myList.add(sayWhereTheDriverIs);
-//            SessionForAUser myTransmitere = new SessionForAUser(sayWhereTheDriverIs,session+"");
-//            sessionBean.listaDeTransmitereDeSesiune(myTransmitere);
+            else
+                if ((jsonType+"").equals("\"client\"")) {
+                    SessionForAUser myTransmitere = new SessionForAUser(modelDeTransmitereAMesajului, session + "");
+                    sessionBean.listaDeTransmitereDeSesiune(myTransmitere);
+                    System.out.println("transmiterea de sesiune"+ myTransmitere);
+                }
 
             System.out.println("response" + sayWhereTheDriverIs);
-//            System.out.println("transmiterea de sesiune"+ myTransmitere);
         }catch (IOException exception){
             System.out.println(String.format("Exception occurred while handling web socket message. Message: %s", exception.getMessage()));
         }

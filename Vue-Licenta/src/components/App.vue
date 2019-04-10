@@ -1,16 +1,14 @@
 <template>
-  <div class="jan">
+  <div class="main-class">
     <router-view></router-view>
 
     <div>
-      <div class="avatar">
-        <md-avatar class="md-large">
+      <div class="avatar" style="margin:0 auto;">
+        <md-avatar class="md-large" >
           <img src="../assets/icons/avatar.png" alt>
         </md-avatar>
       </div>
-      <label class="title">The current user is :</label>
-      <p style="margin-left: 30px;">{{userInfo}}</p>
-
+      <label class="title">The current user is : {{userInfo.preferred_username}}</label>
     <GoogleMap/>
 
     </div>
@@ -159,13 +157,13 @@ body {
 .md-large {
   margin-left: 50px;
 }
-div.jan {
-  margin-top: 15px;
+div.main-class {
+  margin-top: 3%;
   margin-left: 15px;
   margin-right: 15px;
 }
 .avatar {
-  margin-top: 25px;
+  margin-top: 5%;
   margin-left: 15px;
   margin-right: 15px;
 }

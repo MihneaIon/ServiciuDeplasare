@@ -34,11 +34,11 @@ public class DirectionController {
     private NotificationHandler myNotificationHandler;
 
     @Autowired
-    private HandleMessageController handleMessageController;
+    private HandleSessionBeanMessageController handleSessionBeanMessageController;
 
     private static final Logger logger = LogManager.getLogger(DirectionController.class);
 
-    @RequestMapping(path = "/getMulteMasinute", method = RequestMethod.GET)
+    @RequestMapping(path = "/getIntermediateRoad", method = RequestMethod.GET)
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<Position> intermediateRoad() {
         long dateAboutPositionOfTheClient = clientRepository.count();
@@ -47,10 +47,11 @@ public class DirectionController {
         logger.info("Fetching id for destination {}", dateAboutPositionOfTheDestination);
         Client clientPosition = clientRepository.findById(dateAboutPositionOfTheClient).get();
 //        Position destinationClient = handleMessageController.getApplicationScopeMessage();
-        SessionForAUser destinationClient = handleMessageController.getApplicationScopeSessionMessage();
+        SessionForAUser destinationClient = handleSessionBeanMessageController.getApplicationScopeSessionMessage();
 
         String origin = clientPosition.getLat() + "," + clientPosition.getLng();
-        String destination = destinationClient.getPosition().getLat() + "," + destinationClient.getPosition().getLng();
+        String destination = destinationClient.getPosition().getPosition().getLat() + "," + destinationClient.getPosition().getPosition().getLng();
+        System.out.println("Lat destinatie"+destinationClient.getPosition().getPosition().getLat()+ " lng destinatie"+ destinationClient.getPosition().getPosition().getLat() );
         List<Position> myPositionList = new ArrayList<>();
         System.out.println(myPositionList.size() + "aceasta este dimensiunea ");
         DirectionsResult result;

@@ -13,13 +13,10 @@ import DrawerLayout from 'vue-drawer-layout'
 // it is used at the end of this file.
 import cleanAfter from 'helpers/clean-after';
 
-import {MdButton ,MdContent, MdToolbar, MdTabs, MdDrawer, MdList,
-     MdIcon, MdApp, MdAvatar, MdLayoutColumn, MdTitle, MdToolbarSectionEnd,
-    MdListItem, MdAppDrawer, MdAppToolbar} from 'vue-material/dist/components'
-
 import GoogleMap from './components/GoogleMap';
 import Drivers from '@/components/Drivers';
 import VModal from 'vue-js-modal';
+import { MdIcon, MdAvatar} from 'vue-material/dist/components'
 // import Car from './components/Car';
 
 Vue.use(VueAxios, axios);
@@ -30,19 +27,13 @@ Vue.component('GoogleMap',GoogleMap)
  // Vue.component('Car',Car)
 Vue.use(VueGoogleMaps, {
     load: {
-      key: '',
+      key: 'AIzaSyAuH_VblA7ViIJUFqSfVsLnSs7LS1fdEA0',
       libraries: "places"
     },
 })
+Vue.use(VModal)
 Vue.use(MdIcon)
 Vue.use(MdAvatar)
-Vue.use(MdApp)
-Vue.use(MdContent)
-Vue.use(MdButton)
-Vue.use(MdDrawer)
-Vue.use(MdList)
-Vue.use(MdToolbar)
-Vue.use(VModal)
 
 
 
