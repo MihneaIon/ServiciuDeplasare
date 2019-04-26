@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     displayThePrice() {
-      console.log("vulturul ia prada ");
+      //console.log("vulturul ia prada ");
       this.taxe = this.$store.state.tasks.thePrice;
       if (this.taxe)
         return this.taxe;

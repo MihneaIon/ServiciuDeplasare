@@ -49,6 +49,21 @@
             <button class="button-utility" @click="getMyIntermdiateRoad">tanana</button>
           </label>
           <!-- <label>
+            <span></span>
+            <button class="button-utility" @click="checkForEtherumMoney">Trimite tranzactia</button>
+          </label> -->
+           <label>
+            <span></span>
+            <button class="button-utility" @click="payForTrevel">Plateste cu cardul</button>
+          </label>
+          <div>
+            <p>
+              Contractul {{this.$store.state.tasks.driverContract}}
+              There are curently {{this.$store.state.tasks.clientsContract.length}} client now
+              and he/seh must pay {{(this.$store.state.tasks.balance)}}
+            </p>
+          </div>
+          <!-- <label>
             <span>
               <button @click="getMyCloserCars">Posteaza masiniile apropiate</button>
             </span>
@@ -140,6 +155,8 @@ import { mapGetters, mapMutations, mapActions } from "vuex";
 import axios from "axios";
 import { gmapApi } from "vue2-google-maps";
 import Drivers from "./Drivers.vue";
+import invoice from "../invoice";
+import web3 from "../web3";
 
 export default {
   components: {
@@ -218,6 +235,7 @@ export default {
         address: {}
       },
       theClientClickedOnTheSetRoute: true,
+      amountOfEtherum: {},
       // variabile pentru drawer
       isTrue: true,
       width: this.drawerWidth,
@@ -234,6 +252,7 @@ export default {
   created() {},
   mounted() {
     this.geolocate();
+    this.loadingTheContractBetweenDriverAndCustomer();
   },
   computed: {
     ...mapGetters({ cars: "cars" }),
@@ -364,7 +383,7 @@ export default {
             },
             travelMode: "DRIVING"
           },
-          function(response, status) {
+          async function(response, status) {
             if (status === "OK") {
               actualContext.directionsDisplay.setDirections(response),
                 console.log("raspunsul:", response);
@@ -385,9 +404,11 @@ export default {
                   }
                 }
               }
-              actualContext.getTheCost();
-              actualContext.theClientClickedOnTheSetRoute = false
-              // actualContext.$modal.show("price-modal");
+              await actualContext.getTheCost();
+              await actualContext.checkForEtherumMoney();
+              actualContext.theClientClickedOnTheSetRoute = false;
+              await actualContext.$modal.show("price-modal");
+              await actualContext.$store.dispatch("getAllCars");
             } else {
               console.log("Directions request failed due to " + status);
             }
@@ -395,6 +416,45 @@ export default {
         );
         // actualContext.$modal.show("price-modal");
       }
+    },
+    async loadingTheContractBetweenDriverAndCustomer() {
+      const driverAccount = await invoice.methods.driver().call();
+      const clients = await invoice.methods.getClients().call();
+      const balance = await web3.eth.getBalance(invoice.options.address);
+      console.log("e bine");
+      this.$store.commit("sendDriverContract", driverAccount);
+      this.$store.commit("sendBalance", balance);
+      this.$store.commit("sendClientsContract", clients);
+    },
+    payForTheInvoice() {
+      this.$store.state.tasks.value = this.$store.state.tasks.thePrice;
+    },
+    async checkForEtherumMoney() {
+      window.ethereum.enable();
+      const clients = await invoice.methods.getClients().call();
+      const balance = await web3.eth.getBalance(invoice.options.address);
+      const accounts = await web3.eth.getAccounts();
+      
+      console.log(this.$store.state.tasks.thePrice,"sdfkdsfsdkskd")
+      console.log(this.$store.state.tasks.thePrice/720,"boom")
+      await invoice.methods.callACab().send({
+        from: accounts[0],
+        value: web3.utils.toWei((this.$store.state.tasks.thePrice/720)+"", "ether"),
+
+      });
+      this.$store.commit("sendBalance", balance);
+      this.$store.commit("sendClientsContract", clients);
+      this.amountOfEtherum = this.$store.state.tasks.thePrice/720;
+    },
+    async payForTrevel(){
+      window.ethereum.enable();
+      const accounts = await web3.eth.getAccounts();
+      console.log(accounts, "aici avem conturi");
+      // const variabila=  web3.utils.toWei("0.011", "ether");
+      // console.log(variabila);
+      await invoice.methods.payForACab().send({
+        to: accounts[1],
+      })
     },
     addMarkerForACustomDestination() {
       if (this.currentPlace) {
@@ -541,7 +601,7 @@ export default {
     },
     postMyLocation() {
       var scop = this;
-      const url = "http://localhost:8082/position/takeClientPosition";
+      const url = "https://192.168.43.165:8082/position/takeClientPosition";
       const clientPosition = {
         lat: scop.markers[0].position.lat,
         lng: scop.markers[0].position.lng
@@ -565,7 +625,8 @@ export default {
     },
     postMyDestination() {
       var scop = this;
-      const url = "http://localhost:8082/position/takeDestinationPosition";
+      const url =
+        "https://192.168.43.165:8082/position/takeDestinationPosition";
       const clientDestinationPosition = {
         lat: scop.destinationMarker[0].position.lat,
         lng: scop.destinationMarker[0].position.lng
@@ -581,7 +642,7 @@ export default {
     },
     getMyIntermdiateRoad() {
       var scop = this;
-      const url = "http://localhost:8082/distanta/getIntermediateRoad";
+      const url = "https://192.168.43.165:8082/distanta/getIntermediateRoad";
       axios
         .get(url)
         .then(response => {
@@ -611,12 +672,12 @@ export default {
         });
     },
     getTheCost() {
-      const url = "http://localhost:8082/price/settleThePrice";
+      const url = "https://192.168.43.165:8082/price/settleThePrice";
       axios
         .get(url)
         .then(response => {
           this.$store.commit("setThePrice", response.data);
-          //console.log(this.$store.state.tasks.thePrice, "alabama slam");
+          console.log(this.$store.state.tasks.thePrice, "alabama slam");
         })
         .catch(e => {
           this.errors.push(e);
@@ -756,10 +817,10 @@ export default {
   height: 600px; /* The height is 400 pixels  Am modificat  */
   width: 100%; /* The width is the width of the web page */
 }
-#google-app{
+#google-app {
   margin-top: -5px;
   height: 100px; /* The height is 400 pixels  Am modificat  */
-  width: 100%; 
+  width: 100%;
 }
 body {
   height: 900px;

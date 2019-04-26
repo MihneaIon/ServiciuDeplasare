@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="table">
+    <table >
       <thead></thead>
       <tbody>
         <th scope="col">Driver position</th>
@@ -40,6 +40,7 @@ export default {
   methods: {
     trimiteSoferulSelectat(selectedCar) {
       this.$store.commit("selectCar", selectedCar);
+      console.log('am intrat in lista cu cei mai apropiati soferi')
       this.$store.commit("activeDriverSelected", true);
       return this.$store.commit("selectCar", selectedCar);
     },

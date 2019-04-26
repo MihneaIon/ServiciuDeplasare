@@ -19,6 +19,11 @@ const state = {
     },
     driverSelected:false, // variabila care ma va asigura ca am selectat un sofer
     thePrice:{},
+    driverContract:{},
+    clientsContract: [],
+    balance: '',
+    value:{},
+    mesajContract: ''
 }
 
 const getters = {
@@ -30,7 +35,12 @@ const getters = {
     selectedCar: (state) => state.selectedCar,
     takeClientPosition: (stat) => state.clientPosition,
     driverSelected: (state) => state.driverSelected,
-    thePrice: (state) => state.thePrice
+    thePrice: (state) => state.thePrice,
+    driverContract: (state) => state.driverContract,
+    clientsContract : (state) => state.clientsContract,
+    balance: (state) => state.balance,
+    mesajContract:(state) => state.mesajContract
+    
 }
 
 const mutations = {
@@ -85,6 +95,18 @@ const mutations = {
     },
     SOCKET_RECONNECT_ERROR(state){
         state.socket.reconnectError = true;
+    },
+    sendDriverContract(state,value){
+        return state.driverContract = value
+    },
+    sendClientsContract(state,value){
+        return state.clientsContract = value
+    },
+    sendBalance(state, value){
+        return state.balance = value
+    },
+    setTheContractMessage(state, value){
+        return state.mesajContract = value;
     }
     
 }
@@ -98,7 +120,7 @@ const actions = {
         state.commit(types.RESET_CURRENT_TASK);
     },
     getAllCars: ({commit }) =>{
-        return axios.get('http://localhost:8082/cars')
+        return axios.get('https://192.168.43.165:8082/cars')
         .then((response) =>{
             if(response.status==200){
                 commit('setCar',response.data)

@@ -5,8 +5,10 @@ import store from './store';
 import router from './router-config';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import * as VueGoogleMaps from 'vue2-google-maps';
+import * as VueGoogleMaps from 'vue2-google-maps'
 import DrawerLayout from 'vue-drawer-layout'
+// import BootstrapVue from 'bootstrap-vue'
+
 
 
 // this method will delete vue resources when app is relaunched

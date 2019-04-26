@@ -8,7 +8,7 @@
           <img src="../assets/icons/avatar.png" alt>
         </md-avatar>
       </div>
-      <label class="title">The current user is : {{userInfo.preferred_username}}</label>
+      <label class="title">The current user is : {{userInfo}}</label>
     <GoogleMap/>
 
     </div>
@@ -23,7 +23,8 @@ import index from "../index.js";
 import axios from "axios";
 import Drivers from "./Drivers.vue";
 import VueNativeWebSock from 'vue-native-websocket'
-//import Car from './Car.vue'
+// import "bootstrap/dist/css/bootstrap.css";
+// import "bootstrap-vue/dist/bootstrap-vue.css";
 
 module.exports = {
   name: "Regular",

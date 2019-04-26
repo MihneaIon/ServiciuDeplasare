@@ -3,18 +3,20 @@ import VueRouter from 'vue-router';
 // import drower from "vue-drawer-layout";
 
 import store from './store';
-
 import security from './keycloak';
-
 import VueNativeSocket from 'vue-native-websocket'
+import web3 from './web3'
+import invoice from './invoice'
 
 // the next line will register ALL local vue Components
 // if you omit it, you need to register every Components
 // locally wherever you need it
 import Components from 'helpers/register-all-components';
 
+Vue.use(web3);
+Vue.use(invoice);
 Vue.use(VueRouter);
-Vue.use(VueNativeSocket, 'ws://localhost:8082/ws-masini', {
+Vue.use(VueNativeSocket, 'wss://192.168.43.165:8082/ws-masini', {
     store: store,
     format: 'json',
     reconnection: true, // (Boolean) whether to reconnect automatically (false)
