@@ -1,9 +1,8 @@
 package com.licenta.app.UbberLicenta.model;
 
 import com.google.maps.model.DirectionsResult;
+import com.licenta.app.UbberLicenta.TransformDoubleToFloat.TransformDoubleToFloat;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 
@@ -37,10 +36,9 @@ public class Bill {
         else {
             tarif = 1.5 * distanceInKm;
         }
-        BigDecimal price = new BigDecimal(2);
-        price = price.setScale(2, RoundingMode.HALF_EVEN); // here the value is correct (625.30)
-        System.out.println(price);
-        return price.floatValue(); // but here the values is 625.3
+        float price = Float.valueOf(decimalFormat.format(tarif));
+
+       return TransformDoubleToFloat.reversa(price);
     }
 
 }

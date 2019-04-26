@@ -11,7 +11,7 @@ public class DataAboutRoutes {
 
     public static DirectionsResult findTheBestRoute(String origin, String destination) {
         try {
-            GeoApiContext context = new GeoApiContext.Builder().apiKey("").build();
+            GeoApiContext context = new GeoApiContext.Builder().apiKey("AIzaSyAuH_VblA7ViIJUFqSfVsLnSs7LS1fdEA0").build();
 //            DistanceMatrixApiRequest request = DistanceMatrixApi.newRequest(context);
             DirectionsResult calculateRoutes = DirectionsApi.newRequest(context)
                     .alternatives(true)

@@ -33,7 +33,10 @@ public class ClientPosition {
         return myDestinationClientRepository.saveAndFlush(myDestinationClient);
     }
 
+    @RequestMapping(path = "/salutare",method = RequestMethod.GET)
+    public Integer numarceva(){
 
-
+        return (int)myClientRepository.count();
+    }
 
 }

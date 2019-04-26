@@ -33,8 +33,11 @@ public class SessionBean implements PositionInterface{
     @Scope(value = WebApplicationContext.SCOPE_APPLICATION, proxyMode = ScopedProxyMode.TARGET_CLASS)
     @Override
     public List<SessionForAUser> listaDeTransmitereDeSesiune(SessionForAUser transmitereDeSesiune) {
-        listaCuDeToate.add(transmitereDeSesiune);
+        listSessionsForUsers.add(transmitereDeSesiune);
         System.out.println("lista cu de toate "+ transmitereDeSesiune.toString());
-        return listaCuDeToate;
+        return listSessionsForUsers;
     }
+
+
+
 }

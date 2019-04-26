@@ -34,6 +34,7 @@ public class CalculateTaxes {
         Bill roadBill = new Bill(origin,destination);
         float pricForTheSelectedRoad=0;
         pricForTheSelectedRoad = roadBill.returenzPretulCalatoriei();
+        System.out.println("Aici afisez pretul");
         return pricForTheSelectedRoad;
     }
 

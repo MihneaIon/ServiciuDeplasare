@@ -24,7 +24,6 @@ public class DriverBean implements PositionInterface{
 
     @Override
     public List<Position> listAllPosition(Position auxPosition) {
-
         return listAllPosition(auxPosition);
     }
 

@@ -3,11 +3,11 @@ package com.licenta.app.UbberLicenta.model;
 import java.util.Objects;
 
 public class SessionForAUser {
-    private Position position;
+   ModelDeTransmitereAMesajului modelDeTransmitereAMesajului;
     private String sesiune;
 
-    public SessionForAUser(Position position, String sesiune) {
-        this.position = position;
+    public SessionForAUser(ModelDeTransmitereAMesajului modelDeTransmitereAMesajului, String sesiune) {
+        this.modelDeTransmitereAMesajului = modelDeTransmitereAMesajului;
         this.sesiune = sesiune;
     }
 
@@ -15,12 +15,12 @@ public class SessionForAUser {
 
     }
 
-    public Position getPosition() {
-        return position;
+    public ModelDeTransmitereAMesajului getPosition() {
+        return modelDeTransmitereAMesajului;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setPosition(ModelDeTransmitereAMesajului position) {
+        this.modelDeTransmitereAMesajului = position;
     }
 
     public String getSesiune() {
@@ -36,19 +36,19 @@ public class SessionForAUser {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SessionForAUser that = (SessionForAUser) o;
-        return Objects.equals(position, that.position) &&
+        return Objects.equals(modelDeTransmitereAMesajului, that.modelDeTransmitereAMesajului) &&
                 Objects.equals(sesiune, that.sesiune);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(position, sesiune);
+        return Objects.hash(modelDeTransmitereAMesajului, sesiune);
     }
 
     @Override
     public String toString() {
         return "SessionForAUser{" +
-                "position=" + position +
+                "modelDeTransmitereAMesajului=" + modelDeTransmitereAMesajului +
                 ", sesiune='" + sesiune + '\'' +
                 '}';
     }

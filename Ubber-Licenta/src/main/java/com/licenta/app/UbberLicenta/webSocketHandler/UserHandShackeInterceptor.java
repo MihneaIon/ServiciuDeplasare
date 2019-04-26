@@ -13,4 +13,5 @@ public class UserHandShackeInterceptor extends HttpSessionHandshakeInterceptor {
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
         return super.beforeHandshake(request, response, wsHandler, attributes);
     }
+
 }

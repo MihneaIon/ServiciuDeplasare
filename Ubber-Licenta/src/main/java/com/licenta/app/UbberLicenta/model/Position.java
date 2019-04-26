@@ -2,12 +2,12 @@ package com.licenta.app.UbberLicenta.model;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "position")
+//@Entity
+//@Table(name = "position")
 public class Position {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private float lat;
     private float lng;

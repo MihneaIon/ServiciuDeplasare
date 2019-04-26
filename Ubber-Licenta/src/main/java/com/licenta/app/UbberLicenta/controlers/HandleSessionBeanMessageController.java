@@ -32,25 +32,25 @@ public class HandleSessionBeanMessageController {
     @RequestMapping(value = "/scopes/application/session", method = RequestMethod.GET)
     public SessionForAUser getApplicationScopeSessionMessage() {
 
-        sessionBean.listaCuDeToate.add(applicationScopeBeanSession);
-        System.out.println(sessionBean.listaCuDeToate);
-        System.out.println("size-ul listei cu sesiuni" + sessionBean.listaCuDeToate.size());
+        sessionBean.listSessionsForUsers.add(applicationScopeBeanSession);
+        System.out.println(sessionBean.listSessionsForUsers);
+        System.out.println("size-ul listei cu sesiuni" + sessionBean.listSessionsForUsers.size());
         List<String> mySessionList = new ArrayList<>();
         for (Map.Entry<String, List<WebSocketSession>> entry : seesionNotificationHandler.sessions.entrySet()) {
             System.out.println("Key =" + entry.getKey() + "Value= " + entry.getValue());
             mySessionList.add(entry.getKey() + "");
         }
-        System.out.println(sessionBean.listaCuDeToate+" si sizeu-ul "+ sessionBean.listaCuDeToate.size());
-        System.out.println(sessionBean.listaCuDeToate.get(0).getSesiune()+"asta primesc un warn");
+        System.out.println(sessionBean.listSessionsForUsers+" si sizeu-ul "+ sessionBean.listSessionsForUsers.size());
+        System.out.println(sessionBean.listSessionsForUsers.get(0).getSesiune()+"aici primesc un warn");
 
         for (int i = 0; i < seesionNotificationHandler.sessions.size(); i++) {
             System.out.println("i-ul este "+i);
             for (int j = 0; j < mySessionList.size(); j++) {
-                System.out.println("acesta este raspunsul damn" + sessionBean.listaCuDeToate.get(i).getSesiune().substring(28, 64));
+                System.out.println("acesta este raspunsul damn" + sessionBean.listSessionsForUsers.get(i).getSesiune().substring(28, 64));
                 System.out.println(seesionNotificationHandler.getSessionId());
-                if (sessionBean.listaCuDeToate.get(i).getSesiune().substring(28, 64).equals(mySessionList.get(j)) && sessionBean.listaCuDeToate.get(i).getSesiune().substring(28, 64).equals(seesionNotificationHandler.getSessionId())) {
+                if (sessionBean.listSessionsForUsers.get(i).getSesiune().substring(28, 64).equals(mySessionList.get(j)) && sessionBean.listSessionsForUsers.get(i).getSesiune().substring(28, 64).equals(seesionNotificationHandler.getSessionId())) {
                     System.out.println("am intrat ");
-                    return sessionBean.listaCuDeToate.get(i);
+                    return sessionBean.listSessionsForUsers.get(i);
 
                 }
             }

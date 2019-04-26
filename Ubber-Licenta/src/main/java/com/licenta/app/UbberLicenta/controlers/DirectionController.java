@@ -51,7 +51,7 @@ public class DirectionController {
 
         String origin = clientPosition.getLat() + "," + clientPosition.getLng();
         String destination = destinationClient.getPosition().getPosition().getLat() + "," + destinationClient.getPosition().getPosition().getLng();
-        System.out.println("Lat destinatie"+destinationClient.getPosition().getPosition().getLat()+ " lng destinatie"+ destinationClient.getPosition().getPosition().getLat() );
+        System.out.println("Lat destinatie"+destinationClient.getPosition().getPosition().getLat()+ " lng destinatie"+ destinationClient.getPosition().getPosition().getLng() );
         List<Position> myPositionList = new ArrayList<>();
         System.out.println(myPositionList.size() + "aceasta este dimensiunea ");
         DirectionsResult result;

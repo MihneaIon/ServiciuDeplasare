@@ -10,6 +10,8 @@ public interface PositionInterface {
 
     List<Position> myList = new ArrayList<>();
 
+    List<SessionForAUser> listSessionsForUsers = new ArrayList<>();
+
     List<Position> listAllPosition(Position auxPosition);
 
     Position displayList();
@@ -18,5 +20,5 @@ public interface PositionInterface {
 
     //Map<Integer, Position> listaCuDeToate = new TreeMap<>();
 
-    List<SessionForAUser> listaCuDeToate = new ArrayList<>();
+
 }

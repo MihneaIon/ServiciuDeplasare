@@ -1,11 +1,8 @@
 package com.licenta.app.UbberLicenta.webSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.licenta.app.UbberLicenta.controlers.ClosestCars;
 import com.licenta.app.UbberLicenta.model.Position;
-
 import org.json.JSONArray;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -21,8 +18,6 @@ public class UserNotificationConsumer  implements Runnable{
     List<Position> positionList;
 
     private boolean isFirstCall;
-    @Autowired
-    private ClosestCars myControllerKeycloak;
 
     public UserNotificationConsumer(WebSocketSession webSocketSession, String userId, List<Position> positionList){
         this.webSocketSession = webSocketSession;
