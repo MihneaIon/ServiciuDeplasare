@@ -27,7 +27,7 @@
           <!-- atentie aici !!!! -->
           <label>
             <gmap-autocomplete @place_changed="setPlace"></gmap-autocomplete>
-            <button class="button-location" @click="addMarkerForACustomDestination">Add a location</button>
+            <button class="button-location-client" @click="addMarkerForACustomDestination">Add a location</button>
             <button class="curentPosition" @click="addMarkerForCurrentPosition"></button>
           </label>
           <br>
@@ -44,25 +44,25 @@
             <span></span>
             <button class="button-utility" @click="getRoute">Set the road</button>
           </label>
-          <label>
+          <!-- <label>
             <span></span>
             <button class="button-utility" @click="getMyIntermdiateRoad">tanana</button>
-          </label>
+          </label> -->
           <!-- <label>
             <span></span>
             <button class="button-utility" @click="checkForEtherumMoney">Trimite tranzactia</button>
           </label> -->
-           <label>
+           <!-- <label>
             <span></span>
             <button class="button-utility" @click="payForTrevel">Plateste cu cardul</button>
-          </label>
-          <div>
+          </label> -->
+          <!-- <div>
             <p>
               Contractul {{this.$store.state.tasks.driverContract}}
               There are curently {{this.$store.state.tasks.clientsContract.length}} client now
               and he/seh must pay {{(this.$store.state.tasks.balance)}}
             </p>
-          </div>
+          </div> -->
           <!-- <label>
             <span>
               <button @click="getMyCloserCars">Posteaza masiniile apropiate</button>
@@ -136,8 +136,8 @@
             ></gmap-marker>
             <!-- drumul de la client la destinatie -->
             <gmap-marker
-              v-bind:key="distanta.id"
-              v-for="(m, distanta) in vectorDePozitiiIntermediare"
+              v-bind:key="cars.lng"
+              v-for="(m, cars) in vectorDePozitiiIntermediare"
               v-bind:position="m.position"
               v-bind:icon="{url: 'https://www.freeiconspng.com/uploads/auto-car-coupe-sport-top-view-icon-0.png', scaledSize: { width: 20, height: 25 }}"
               v-bind::clickable="true"
@@ -405,7 +405,7 @@ export default {
                 }
               }
               await actualContext.getTheCost();
-              await actualContext.checkForEtherumMoney();
+              // await actualContext.checkForEtherumMoney();
               actualContext.theClientClickedOnTheSetRoute = false;
               await actualContext.$modal.show("price-modal");
               await actualContext.$store.dispatch("getAllCars");
@@ -429,33 +429,33 @@ export default {
     payForTheInvoice() {
       this.$store.state.tasks.value = this.$store.state.tasks.thePrice;
     },
-    async checkForEtherumMoney() {
-      window.ethereum.enable();
-      const clients = await invoice.methods.getClients().call();
-      const balance = await web3.eth.getBalance(invoice.options.address);
-      const accounts = await web3.eth.getAccounts();
+    // async checkForEtherumMoney() {
+    //   window.ethereum.enable();
+    //   const clients = await invoice.methods.getClients().call();
+    //   const balance = await web3.eth.getBalance(invoice.options.address);
+    //   const accounts = await web3.eth.getAccounts();
       
-      console.log(this.$store.state.tasks.thePrice,"sdfkdsfsdkskd")
-      console.log(this.$store.state.tasks.thePrice/720,"boom")
-      await invoice.methods.callACab().send({
-        from: accounts[0],
-        value: web3.utils.toWei((this.$store.state.tasks.thePrice/720)+"", "ether"),
+    //   console.log(this.$store.state.tasks.thePrice,"sdfkdsfsdkskd")
+    //   console.log(this.$store.state.tasks.thePrice/720,"boom")
+    //   await invoice.methods.callACab().send({
+    //     from: accounts[0],
+    //     value: web3.utils.toWei((this.$store.state.tasks.thePrice/720)+"", "ether"),
 
-      });
-      this.$store.commit("sendBalance", balance);
-      this.$store.commit("sendClientsContract", clients);
-      this.amountOfEtherum = this.$store.state.tasks.thePrice/720;
-    },
-    async payForTrevel(){
-      window.ethereum.enable();
-      const accounts = await web3.eth.getAccounts();
-      console.log(accounts, "aici avem conturi");
-      // const variabila=  web3.utils.toWei("0.011", "ether");
-      // console.log(variabila);
-      await invoice.methods.payForACab().send({
-        to: accounts[1],
-      })
-    },
+    //   });
+    //   this.$store.commit("sendBalance", balance);
+    //   this.$store.commit("sendClientsContract", clients);
+    //   this.amountOfEtherum = this.$store.state.tasks.thePrice/720;
+    // },
+    // async payForTrevel(){
+    //   window.ethereum.enable();
+    //   const accounts = await web3.eth.getAccounts();
+    //   console.log(accounts, "aici avem conturi");
+    //   // const variabila=  web3.utils.toWei("0.011", "ether");
+    //   // console.log(variabila);
+    //   await invoice.methods.payForACab().send({
+    //     to: accounts[1],
+    //   })
+    // },
     addMarkerForACustomDestination() {
       if (this.currentPlace) {
         const marker = {
@@ -686,8 +686,9 @@ export default {
     },
     clickOnTheCarForMoreDetails(masina) {
       this.$store.dispatch("getAllCars");
-      this.selectYourFavouriteDriver();
-      console.log("culoarea masinii", this.masina.color);
+      //this.$store.commit("selectCar", masina);
+      // this.selectYourFavouriteDriver();
+      // console.log("culoarea masinii", this.masina.color);
       if (!this.esckey) {
         this.$refs.drawer.toggle();
       }
@@ -926,13 +927,25 @@ p {
 }
 
 .button-utility {
-  float: left;
   background-color: #4caf50; /* Green */
-  border: 1px solid green;
-  color: white;
+  border: none;
+  color: black;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 2px 2px;
+  cursor: pointer;
+  border-radius: 50%;
 }
 .button-utility:hover {
   background-color: #3e8e41;
+}
+.button-location-client{
+  cursor: pointer;
+  padding: 10px;
+  background-color: #4caf50;
 }
 
 .button-utility:active {
@@ -943,6 +956,6 @@ p {
 .button-location {
   background-color: #4caf50; /* Green */
   border: 1px solid green;
-  color: white;
+  color: black;
 }
 </style>

@@ -26,7 +26,6 @@ Vue.use(DrawerLayout)
 
 Vue.component('Drivers',Drivers)
 Vue.component('GoogleMap',GoogleMap)
- // Vue.component('Car',Car)
 Vue.use(VueGoogleMaps, {
     load: {
       key: '',

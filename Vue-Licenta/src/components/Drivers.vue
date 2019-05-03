@@ -4,15 +4,15 @@
       <thead></thead>
       <tbody>
         <th scope="col">Driver position</th>
-        <td>{{selectedCar.position}}</td>
+        <td>{{car.position}}</td>
       </tbody>
       <tbody>
         <th scope="col">Color</th>
-        <td>{{selectedCar.color}}</td>
+        <td>{{car.color}}</td>
       </tbody>
       <tbody>
         <th scope="col">Driver Name</th>
-        <td>{{selectedCar.driverName}}</td>
+        <td>{{car.driverName}}</td>
       </tbody>
       <label>
         <span></span>
@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       driver: [],
-      car: {}
+      car: this.$store.state.tasks.selectedCar
     };
   },
   methods: {
